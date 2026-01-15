@@ -1,27 +1,47 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
+import { PokeAPI } from "./api"; // This links to your api.ts file
 
-// I'm using the exact string from your screenshot line 1
-const cardStyle = "bg-green-500 w-40 h-40 text-white flex items-center justify-center";
+interface Props {
+  id: number;
+  image: string;
+  name: string;
+  types: string[];
+}
+
+const Card: React.FC<Props> = (props) => (
+  <div className="bg-white border border-gray-300 rounded-xl shadow-lg p-5 w-64 flex flex-col gap-4">
+    <h4 className="text-xl text-gray-900 font-bold capitalize">{props.name} - {props.id}</h4>
+    <div className="bg-gray-100 rounded-lg aspect-square flex items-center justify-center overflow-hidden">
+      <img src={props.image} alt={props.name} className="w-full h-full object-contain" />
+    </div>
+    <div className="flex justify-end mt-2">
+      {props.types.map(t => <span key={t} className="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold uppercase">{t}</span>)}
+    </div>
+  </div>
+);
 
 export function Root() {
-  // We create an array of 12 items to match your grid
-  const items = Array(4).fill("01");
+  const [pokemons, setPokemons] = useState<any[]>([]);
+
+  useEffect(() => {
+    PokeAPI.listPokemons().then((response) => {
+      const formattedData = response.results.map((item: any, idx: number) => ({
+        id: idx + 1,
+        name: item.name,
+        image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idx + 1}.png`
+      }));
+      setPokemons(formattedData);
+    });
+  }, []);
 
   return (
-    /* This container matches the 'text-5xl space-x-2' logic from your screenshot */
-    <div className="p-10">
-      <h1 className="text-4xl font-bold mb-8">Home</h1>
-      
-      <div className="flex flex-wrap gap-4">
-        {items.map((item, index) => (
-          <Link key={index} to="/detail" className="block transition-transform hover:scale-105">
-            <div className={cardStyle}>
-              <span className="text-5xl font-bold">{item}</span>
-            </div>
-          </Link>
-        ))}
-      </div>
+    <div className="p-10 flex flex-wrap gap-6 justify-center">
+      {pokemons.map((p) => (
+        <Link key={p.id} to={`/detail/${p.id}`}>
+          <Card id={p.id} name={p.name} image={p.image} types={["grass"]} />
+        </Link>
+      ))}
     </div>
   );
 }
