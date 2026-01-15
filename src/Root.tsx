@@ -1,48 +1,27 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
 
-export const Root = () => {
-  const [count, setCount] = useState(0);
-  const [title, setTitle] = useState("Titolo iniziale");
+// I'm using the exact string from your screenshot line 1
+const cardStyle = "bg-green-500 w-40 h-40 text-white flex items-center justify-center";
 
-  useEffect(() => {
-    if (count === 4) {
-      setTitle("Il titolo ha superato il 4");
-    }
-  }, [count]);
+export function Root() {
+  // We create an array of 12 items to match your grid
+  const items = Array(12).fill("01");
 
   return (
-    <div className="h-dvh flex flex-col items-center justify-center">
-      <div className="bg-white p-8 rounded-md shadow-lg">
-        <h1 className="text-center font-bold text-3xl text-blue-400 mb-4">
-          {title}
-        </h1>
-
-        <h2 className="text-center font-bold text-xl mb-6">Vite + React</h2>
-
-        <div className="flex flex-col items-center space-y-4">
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md cursor-pointer hover:bg-blue-600 transition-colors"
-            onClick={() => setCount((count) => count + 1)}
-          >
-            Hai premuto il pulsante {count} {count === 1 ? "volta" : "volte"}
-          </button>
-
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md cursor-pointer hover:bg-blue-600 transition-colors"
-            onClick={() => setTitle("Charizard")}
-          >
-            Cambia titolo
-          </button>
-
-          <Link
-            to="/frontend-rocks/dettaglio/1"
-            className="text-blue-500 underline"
-          >
-            Link alla pagina di dettaglio
+    /* This container matches the 'text-5xl space-x-2' logic from your screenshot */
+    <div className="p-10">
+      <h1 className="text-4xl font-bold mb-8">Home</h1>
+      
+      <div className="flex flex-wrap gap-4">
+        {items.map((item, index) => (
+          <Link key={index} to="/detail" className="block transition-transform hover:scale-105">
+            <div className={cardStyle}>
+              <span className="text-5xl font-bold">{item}</span>
+            </div>
           </Link>
-        </div>
+        ))}
       </div>
     </div>
   );
-};
+}
