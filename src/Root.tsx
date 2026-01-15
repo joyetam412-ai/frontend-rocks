@@ -6,7 +6,7 @@ const cardStyle = "bg-green-500 w-40 h-40 text-white flex items-center justify-c
 
 export function Root() {
   // We create an array of 12 items to match your grid
-  const items = Array(12).fill("01");
+  const items = Array(4).fill("01");
 
   return (
     /* This container matches the 'text-5xl space-x-2' logic from your screenshot */
